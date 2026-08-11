@@ -1,1 +1,7 @@
-{:schema "etzhayyim.repository/v1" :repository "etzhayyim/com-etzhayyim-app-producer" :kind :standalone-app-artifact :canonical-record-format :edn :source-path "60-apps/etzhayyim-project-producer"}
+{:schema "etzhayyim.repository/v1"
+ :repository "cloud-itonami/app-producer"
+ :kind :standalone-app-artifact
+ :canonical-record-format :edn
+ :source-path "60-apps/etzhayyim-project-producer"
+ :boundary {:role :media-production-application
+            :media-service "cloud-itonami/media"}}
