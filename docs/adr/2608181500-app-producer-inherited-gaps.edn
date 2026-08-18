@@ -1,0 +1,58 @@
+[{:db/id -1
+  :adr/id "ADR-2608181500"
+  :adr/title "app-producer: a project record and two client-edge fragments, with no manifest that could build either"
+  :adr/status "accepted"
+  :adr/date "2026-08-18"
+  :adr/repo "cloud-itonami/app-producer"
+  :adr/context
+  "This repository had no README.md. A cold reader's only entry points were README.edn (7 lines of EDN metadata), PROJECT.jsonld (whose description is the string \"TBD\"), and appview/README.md (a migration plan for components that are not here). Writing that entry point required measuring what is actually present, and the measurement turned up five things an owner has to decide about. None of them were changed in this commit; each is recorded here with its evidence, because each needs a decision that documentation cannot make.
+
+Everything below was measured on 2026-08-18 from a fresh worktree of cloud-itonami/main at 389fd48, on macOS 15 with node v26.3.0, tsc 5.9.2, esbuild 0.28.0, nbb v1.4.210.
+
+Custody was verified first, and it is exact. migration.edn claims it copied 5 files / 6744 bytes from etzhayyim/root@691c245da48f3acb11dd757218f189ff2482b1c8, subtree 60-apps/etzhayyim-project-producer, git-tree 37a4aac95d8eeedb76096b73fa9122b919c798ae. That subtree at that revision holds exactly 5 files totalling 6744 bytes, its tree object is that SHA, and all 5 blobs are byte-identical here SHA-for-SHA. The repository carries 7 tracked files rather than 5 because the extraction added README.edn and migration.edn themselves; the count is correct, not short by two. So nothing recorded below was introduced by the migration -- all of it is inherited, and each fix belongs upstream as well as here."
+  :adr/decision
+  "1. DO NOT add a package.json to make the TypeScript build. There is no build or dependency manifest of any kind in this repository -- zero package.json, tsconfig.json, svelte.config.js, vite.config.ts, deps.edn or shadow-cljs.edn -- and the two tracked .ts files import three modules that consequently cannot resolve: $app/environment (SvelteKit's generated alias), $lib/grpc/transport (SvelteKit's $lib alias, which would have to be pointed at cdn/producer-ui/src/lib), and @connectrpc/connect (an undeclared npm dependency). esbuild 0.28.0 reports exactly those three across the two files; tsc with modern flags (--strict --target es2022 --module es2022 --moduleResolution bundler) exits non-zero with 9 errors of which 3 are TS2307. Writing a manifest here would be inventing a build that the upstream monorepo owns, against dependency versions nobody has chosen, for two files that are client edges rather than a program. What is missing is not a config file but the rest of the application.
+
+2. DO NOT read the raw tsc error count as a defect count. Run the same two files without explicit flags -- the ES5 defaults you get when no tsconfig.json exists -- and tsc reports 15 errors instead of 9. The extra six (Promise requires ES2015, Array.prototype.find missing, and similar) are artifacts of the absent configuration, not properties of the source. The durable figure is the 3 TS2307s; the 4 TS18046 'error is of type unknown' reports follow from ConnectError never resolving, so the narrowing in the catch block cannot type-check.
+
+3. ESCALATE, do not silence, the three dangling references. NOTICE directs the reader to CHARTER-RIDER.md for the licence terms it says apply; that file is not in this repository. PROJECT.jsonld sets \"scheduler\": \"scheduler.jsonld\"; that file is not here either, though its content is inlined under rdfUnifiedDocuments, so the reference is redundant rather than lossy. appview/README.md lists producer-mcp-component under 実装済み (implemented); no such path exists here. Deleting any of these lines would remove the evidence that something is missing without supplying it. The first is a licensing question (the NOTICE asserts terms the repository does not carry), and the third is a question about where producer-services-8y9ctzzc actually lives -- both belong to an owner, not to a documentation commit.
+
+4. LEAVE PROJECT.jsonld empty rather than filling it in. Its description is the literal string \"TBD\", its status is \"Planned\", capabilities.terms is empty, and both survivalIndicators (requests, gccCredit) carry value: null with valueUpdatedAt: null. A documentation pass could write a plausible description from the file names, and that is exactly the failure mode to avoid: an invented description is indistinguishable from a recorded one once committed, and this project's own record would then assert something no one decided. It stays \"TBD\" and the README says so.
+
+5. ADD NO TESTS. The repository has zero test files, and this commit adds none. There is nothing here that can be executed -- no module resolves -- so any test added now would either assert on file contents (restating the verifier) or be skipped. A test suite that cannot fail for a real reason is the same defect as documentation that cannot be wrong."
+  :adr/consequences
+  "The repository now states its own condition in README.md, and every number in that statement is machine-checked by docs/verify-docs-claims.cljs -- 30 checks. It exits 3, not 0 and not 1, when it cannot answer: run outside a git repository, run from the wrong directory, or run against a tree with no commits. That distinction is the point. A check that could not run must not return the same value as a check that ran and found nothing wrong.
+
+The verifier was proved to discriminate before it was landed, on a throwaway copy: adding a package.json fails exactly the 'zero build manifests' check and nothing else; changing PROJECT.jsonld's description from TBD to a same-length string fails exactly the description check while the byte-total check stays green; adding CHARTER-RIDER.md fails exactly the dangling-reference check; deleting README.md and running outside a repository each exit 3. Unmutated it exits 0.
+
+Two things are deliberately NOT checked by the verifier, because checking them here would let 'could not measure' return the same value as 'measured and fine'. Custody needs a second repository (etzhayyim/root); if that checkout were merely absent, a naive check would pass. The build failure needs tsc/esbuild on PATH; if they were absent, 'could not run' would read as 'could not resolve'. Custody is walked by hand in docs/operator-quickstart.md §4, and the verifier instead checks the repo-internal cause of the build failure -- zero manifests, three unresolvable specifiers, no SvelteKit config to define the aliases.
+
+What stays broken and visible: a project whose own record says TBD, a NOTICE pointing at absent licence terms, a migration plan listing an absent component as implemented, and two source files that no toolchain in this repository can compile. Each is now findable in one place instead of requiring a reader to run the toolchain to discover it."
+  :adr/evidence
+  "{:measured-at \"2026-08-18\"
+    :base-commit \"389fd48ca689f55fe73a0d6f0ccd00b81df73564\"
+    :tracked {:files 7 :bytes 7433 :commits 3 :last-commit \"2026-08-11\" :test-files 0}
+    :custody {:source-repo \"etzhayyim/root\"
+              :revision \"691c245da48f3acb11dd757218f189ff2482b1c8\"
+              :path \"60-apps/etzhayyim-project-producer\"
+              :git-tree \"37a4aac95d8eeedb76096b73fa9122b919c798ae\"
+              :source-files 5 :source-bytes 6744
+              :blobs-identical 5 :blobs-differing 0}
+    :build {:manifests 0
+            :unresolvable-specifiers [\"$app/environment\" \"@connectrpc/connect\" \"$lib/grpc/transport\"]
+            :esbuild \"0.28.0\"
+            :tsc {:version \"5.9.2\"
+                  :modern-flags {:errors 9 :ts2307 3}
+                  :default-flags {:errors 15}}}
+    :dangling [{:from \"NOTICE\" :to \"CHARTER-RIDER.md\"}
+               {:from \"PROJECT.jsonld\" :to \"scheduler.jsonld\" :note \"content inlined under rdfUnifiedDocuments\"}
+               {:from \"appview/README.md\" :to \"producer-mcp-component\" :note \"listed as 実装済み\"}]
+    :project-record {:description \"TBD\" :status \"Planned\"
+                     :capability-terms 0 :survival-indicators 2 :null-valued 2}
+    :verifier {:path \"docs/verify-docs-claims.cljs\" :checks 30
+               :exit-codes {0 \"all matched\" 1 \"a claim is false\" 3 \"could not answer\"}
+               :mutations-proved [\"add package.json -> zero-build-manifests FAIL\"
+                                  \"TBD->XYZ (same length) -> description FAIL, bytes still ok\"
+                                  \"add CHARTER-RIDER.md -> dangling-reference FAIL\"
+                                  \"rm README.md -> exit 3\"
+                                  \"run outside git repo -> exit 3\"]}}"}]
