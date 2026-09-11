@@ -97,7 +97,7 @@ Neither is in this repository; the second is listed there as already implemented
 ## Verifying
 
 ```bash
-nbb docs/verify-docs-claims.cljk
+kbb --backend sci docs/verify-docs-claims.cljk
 ```
 
 Exit `0` = every claim re-measured and matched, `1` = a claim is now false,
