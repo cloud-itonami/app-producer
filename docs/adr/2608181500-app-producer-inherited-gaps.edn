@@ -21,7 +21,7 @@ Custody was verified first, and it is exact. migration.edn claims it copied 5 fi
 
 5. ADD NO TESTS. The repository has zero test files, and this commit adds none. There is nothing here that can be executed -- no module resolves -- so any test added now would either assert on file contents (restating the verifier) or be skipped. A test suite that cannot fail for a real reason is the same defect as documentation that cannot be wrong."
   :adr/consequences
-  "The repository now states its own condition in README.md, and every number in that statement is machine-checked by docs/verify-docs-claims.cljs -- 30 checks. It exits 3, not 0 and not 1, when it cannot answer: run outside a git repository, run from the wrong directory, or run against a tree with no commits. That distinction is the point. A check that could not run must not return the same value as a check that ran and found nothing wrong.
+  "The repository now states its own condition in README.md, and every number in that statement is machine-checked by docs/verify-docs-claims.cljk -- 30 checks. It exits 3, not 0 and not 1, when it cannot answer: run outside a git repository, run from the wrong directory, or run against a tree with no commits. That distinction is the point. A check that could not run must not return the same value as a check that ran and found nothing wrong.
 
 The verifier was proved to discriminate before it was landed, on a throwaway copy: adding a package.json fails exactly the 'zero build manifests' check and nothing else; changing PROJECT.jsonld's description from TBD to a same-length string fails exactly the description check while the byte-total check stays green; adding CHARTER-RIDER.md fails exactly the dangling-reference check; deleting README.md and running outside a repository each exit 3. Unmutated it exits 0.
 
@@ -49,7 +49,7 @@ What stays broken and visible: a project whose own record says TBD, a NOTICE poi
                {:from \"appview/README.md\" :to \"producer-mcp-component\" :note \"listed as 実装済み\"}]
     :project-record {:description \"TBD\" :status \"Planned\"
                      :capability-terms 0 :survival-indicators 2 :null-valued 2}
-    :verifier {:path \"docs/verify-docs-claims.cljs\" :checks 30
+    :verifier {:path \"docs/verify-docs-claims.cljk\" :checks 30
                :exit-codes {0 \"all matched\" 1 \"a claim is false\" 3 \"could not answer\"}
                :mutations-proved [\"add package.json -> zero-build-manifests FAIL\"
                                   \"TBD->XYZ (same length) -> description FAIL, bytes still ok\"
