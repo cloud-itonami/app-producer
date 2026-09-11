@@ -119,7 +119,7 @@ The repository has 7 files rather than 5 because the extraction added
 ## 5. Re-measure everything this documentation claims
 
 ```bash
-nbb docs/verify-docs-claims.cljk
+kbb --backend sci docs/verify-docs-claims.cljk
 ```
 
 - `0` — every claim re-measured and matched.
