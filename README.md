@@ -6,7 +6,7 @@ application, and nothing in it can currently be built, typechecked, or tested.**
 
 Every number on this page was measured on 2026-08-18 (macOS 15, node v26.3.0,
 tsc 5.9.2, esbuild 0.28.0) and is re-measured by
-[`docs/verify-docs-claims.cljs`](docs/verify-docs-claims.cljs). Run that before
+[`docs/verify-docs-claims.cljk`](docs/verify-docs-claims.cljk). Run that before
 trusting any of them.
 
 | path | tracked | state |
@@ -97,7 +97,7 @@ Neither is in this repository; the second is listed there as already implemented
 ## Verifying
 
 ```bash
-nbb docs/verify-docs-claims.cljs
+nbb docs/verify-docs-claims.cljk
 ```
 
 Exit `0` = every claim re-measured and matched, `1` = a claim is now false,
